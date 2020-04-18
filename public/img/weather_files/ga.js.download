@@ -1,0 +1,102 @@
+(function() {
+  var Clearbit, providePlugin,
+    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  providePlugin = function(pluginName, pluginConstructor) {
+    var tryApply = function() {
+      var ga = window[window['GoogleAnalyticsObject'] || 'ga'];
+
+      if (typeof ga === 'function') {
+        ga('provide', pluginName, pluginConstructor);
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    if (tryApply()) {
+      // Native support
+    } else if (window.analytics && typeof window.analytics.ready === 'function') {
+      // Segment support
+      analytics.ready(tryApply);
+    } else {
+      console.error("Clearbit error: 'ga' variable not found.");
+    }
+  };
+
+  Clearbit = (function() {
+      function Clearbit(tracker, config) {
+        this.tracker = tracker;
+        this.config = config != null ? config : {};
+        this.triggerEvent = bind(this.triggerEvent, this);
+        this.setIPDimensions = bind(this.setIPDimensions, this);
+        this.setDimensions = bind(this.setDimensions, this);
+        this.set = bind(this.set, this);
+        this.done = bind(this.done, this);
+        this.mapping = this.config.mapping || {};
+        this.done({"ip":"103.87.58.169","domain":"virinchisoftware.com","fuzzy":true,"company":{"id":"c9904667-47a1-4b93-b36c-e206bb18dfb0","name":"Virinchi Software Pvt","legalName":null,"domain":"virinchisoftware.com","domainAliases":[],"site":{"phoneNumbers":["+91 120 406 8370","+91 8920 645 179"],"emailAddresses":["info@virinchisoftware.com"]},"category":{"sector":"Information Technology","industryGroup":"Software \u0026 Services","industry":"Internet Software \u0026 Services","subIndustry":"Internet Software \u0026 Services","sicCode":"48","naicsCode":"51"},"tags":["Information Technology \u0026 Services","Technology","Consulting \u0026 Professional Services","B2B","SAAS","Mobile","Enterprise"],"description":"Customize Mobile Application Development Company - Virinchi Software is one of the best mobile application development companies in Delhi NCR, India offering world class app development services. ","foundedYear":2011,"location":"हरोला सेक्टर 2., D Block, Pocket D, Sector 27, Noida, Uttar Pradesh 201301, India","timeZone":"Asia/Kolkata","utcOffset":5,"geo":{"streetNumber":null,"streetName":null,"subPremise":null,"city":"Noida","postalCode":"201301","state":"Uttar Pradesh","stateCode":"UP","country":"India","countryCode":"IN","lat":28.5817485,"lng":77.332263},"logo":"https://logo.clearbit.com/virinchisoftware.com","facebook":{"handle":"virinchisoft","likes":435},"linkedin":{"handle":"company/virinchi-software-pvt-ltd"},"twitter":{"handle":"virinchisoft","id":"264157206","bio":"Virinchi Software is Web \u0026 Mobile Apps Development Agency. #iosAppDevelopment #AndroidAppDevelopment #iPhoneAppDevelopment","followers":776,"following":1740,"location":"New Delhi, India","site":"http://t.co/b0eSGPVJsR","avatar":"https://pbs.twimg.com/profile_images/878596627442810880/hcMX9BNt_normal.jpg"},"crunchbase":{"handle":"organization/virinchi-software"},"emailProvider":false,"type":"private","ticker":null,"identifiers":{"usEIN":null},"phone":null,"metrics":{"alexaUsRank":null,"alexaGlobalRank":3070475,"employees":30,"employeesRange":"11-50","marketCap":null,"raised":null,"annualRevenue":null,"estimatedAnnualRevenue":"$1M-$10M","fiscalYearEnd":null},"indexedAt":"2020-03-15T12:44:24.566Z","tech":["google_apps","apache","recaptcha","google_maps","google_analytics","google_tag_manager"],"techCategories":["productivity","web_servers","authentication_services","geolocation","analytics","tag_management"],"parent":{"domain":null},"ultimate_parent":{"domain":null}}});
+      }
+      Clearbit.prototype.done = function(response) {
+          if (response) {
+             this.setIPDimensions(response);
+             if (response.company){
+                 this.setDimensions(response.company);
+            }
+            return this.triggerEvent();
+         }
+       };
+        Clearbit.prototype.set = function(key, value) {
+         if (key && value) {
+           return this.tracker.set(key, value);
+         }
+       };
+        Clearbit.prototype.setIPDimensions = function(response) {
+         if (typeof response.type !== 'undefined') {
+           this.set(this.mapping.type, response.type)
+         }
+       }
+
+    Clearbit.prototype.setDimensions = function(company) {
+      var ref, ref1;
+      this.set(this.mapping.companyName, company.name);
+      this.set(this.mapping.companyDomain, company.domain);
+      this.set(this.mapping.companyType, company.type);
+      this.set(this.mapping.companyTags, (ref = company.tags) != null ? ref.join(',') : void 0);
+      this.set(this.mapping.companyTech, (ref1 = company.tech) != null ? ref1.join(',') : void 0);
+      this.set(this.mapping.companySector, company.category.sector);
+      this.set(this.mapping.companyIndustryGroup, company.category.industryGroup);
+      this.set(this.mapping.companyIndustry, company.category.industry);
+      this.set(this.mapping.companySubIndustry, company.category.subIndustry);
+      this.set(this.mapping.companySicCode, company.category.sicCode);
+      this.set(this.mapping.companyNaicsCode, company.category.naicsCode);
+      this.set(this.mapping.companyCountry, company.geo.countryCode);
+      this.set(this.mapping.companyState, company.geo.stateCode);
+      this.set(this.mapping.companyCity, company.geo.city);
+      this.set(this.mapping.companyFunding, company.metrics.raised);
+      this.set(this.mapping.companyEstimatedAnnualRevenue, company.metrics.estimatedAnnualRevenue);
+      this.set(this.mapping.companyEmployeesRange, company.metrics.employeesRange);
+      this.set(this.mapping.companyEmployees, company.metrics.employees);
+      return this.set(this.mapping.companyAlexaRank, company.metrics.alexaGlobalRank);
+    };
+
+    Clearbit.prototype.triggerEvent = function() {
+      return this.tracker.send(
+        'event',
+        'Clearbit',
+        'Enriched',
+        'Clearbit Enriched',
+        {nonInteraction: true}
+      );
+    };
+
+    return Clearbit;
+
+  })();
+
+  providePlugin('Clearbit', Clearbit);
+
+  
+
+  
+
+}).call(this);

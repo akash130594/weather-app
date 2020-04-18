@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" media="all" href="./application-fd4cda8e01f00075c97126327ffd1ca5ae9e3449670c6b2ec4cea8dfdd75fe0e(1).css">
+    <meta property="og:title" content="s100atxj">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://share.getcloudapp.com/wbu0551">
+    <meta property="og:published_time" content="2017-11-17 00:21:13 UTC">
+    <meta property="og:description" content="Shared with CloudApp">
+    <meta name="twitter:card" value="summary_large_image">
+    <meta name="twitter:site" value="@cloudapp">
+    <meta property="og:image" content="https://thumbnail.getcloudapp.com/p/wbu0551/0x800/f.v1.n0.cdn.getcloudapp.com/items/3Q3L1a140p3W423E2S2p/s100atxj.pdf">
+    <meta name="twitter:image" value="https://thumbnail.getcloudapp.com/p/wbu0551/0x800/f.v1.n0.cdn.getcloudapp.com/items/3Q3L1a140p3W423E2S2p/s100atxj.pdf">
+    <link rel="canonical" href="https://share.getcloudapp.com/wbu0551">
+    <script src="./jquery.min.js.download"></script>
+    <script src="./pusher.min.js.download"></script>
+<script>
+  let getPusherChannel = function(channelName) {
+    let pushConfig = {};
+    if(channelName === undefined && false ) {
+      channelName = "current_user.pusher_channel";
+    }  else if (channelName === undefined) {
+      return null;
+    }
+
+    if( window.sessionStorage.getItem('jwt') !== null) {
+      pushConfig = {
+        authEndpoint: '/api/v4/pusher_auth',
+        auth: {
+          headers: {
+            Authorization: window.sessionStorage.getItem('jwt'),
+          },
+        }
+      };
+    } else {
+      pushConfig['cluster'] = "mt1";
+    }
+
+
+    let pusher = new Pusher("d64531b5b7c8c513c88d", pushConfig);
+    return pusher.subscribe(channelName);
+  }
+
+  let $pusher = null;
+  $(document).ready(function() {
+    $pusher = getPusherChannel();
+  });
+</script>
+
+    <meta name="robots" content="noindex">
+  </head>
+  <body class="embed">
+    <div id="#embedded-card">
+          <div class="card-header">
+    <div class="d-inline-block">
+      <p class="card-title mb-0">s100atxj</p>
+      <a class="embed-branding-link" href="https://www.getcloudapp.com/?utm_source=embed_branding&amp;utm_medium=embed"><img src="./cloudapp-icon-c00dabfccf3d5dcc75f1551d87d4d618866291e4a236ac68453072125cfee036.png"><span>Shared with CloudApp</span></a>
+    </div>
+  </div>
+
+<div class="file-feature">
+  <div class="file-image-container">
+      <span class="file-extension">.pdf</span>
+    <img src="./file-placeholder-bdd2b9321dddbf62810a81c379d0c764dde673cc524ea3e2970eb5fe050372ec.svg">
+  </div>
+  <h2 class="file-title">s100atxj.pdf</h2>
+  <a class="cloudapp-btn" title="Download Drop" target="_blank" data-testid="file-feature-download" href="https://share.getcloudapp.com/items/wbu0551/download">
+    Download
+</a></div>
+
+    </div>
+  
+
+</body></html>
