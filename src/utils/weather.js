@@ -11,7 +11,8 @@ const forecast = (latitide, longitude, callback) => {
         } else if (body.error) {
             callback('Input Undefined',undefined);
         } else {
-            callback(undefined, "Current Temperature: " + body.current.temperature + " The Possiblility of Rain is: " + body.current.precip)
+            callback(undefined, "Current Temperature: " + body.current.temperature + " The Possiblility of Rain is: " + body.current.precip
+                + "Time Zone Used is "+ body.location.timezone_id)
         }
     })
 };
